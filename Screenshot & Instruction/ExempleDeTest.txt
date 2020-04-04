@@ -1,0 +1,21 @@
+
+
+
+(Configuration du plan de test)
+Scénario réduit:
+- Reduced Thread group: 
+		- Number of thread :1
+		- Ramp-up period (a.k.a load by JMeter at each x second): 10
+		- 5 iteration
+- Average Thread group: reason is the indian on the video said it was the average number of visit on a website
+		- # 3
+		- 6 sec
+		- 10 iter
+- High
+		- # 20
+		- 2 sec
+		- 30 iter
+- Exceptionaly high:
+		- 100
+		- 1 sec
+		- 200 iter

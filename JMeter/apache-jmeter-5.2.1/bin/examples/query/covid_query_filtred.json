@@ -1,0 +1,33 @@
+{
+    "query": {
+        "filtered": {
+            "query": {
+                "match_all": {}
+            },
+            "filter": {
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "pubmed_id": "${__eval(${PUBMED_ID})}"
+                            }
+                        },
+                        {
+                            "terms": {
+                                "license": ["${__eval(${LICENSE})}","all"]
+                            }
+                        },
+                        {
+                            "range": {
+                                "publish_time": {
+                                  "le": "${__eval(${PUBLISH_TIME})}"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    
+    }
+}

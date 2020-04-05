@@ -1,0 +1,57 @@
+version: '2.2'
+services:
+  master:
+    build: .
+    container_name: es_master
+    environment:
+      - node.master=true
+      - node.data=false
+      - cluster.name=cluster-01
+      - cluster.initial_master_nodes=master
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 8849:8849
+    networks:
+      - elastic
+    restart: always
+    privileged: true
+  node:
+    build: .
+    environment:
+      - cluster.name=cluster-01
+      - node.max_local_storage_nodes=6
+      - discovery.zen.ping.unicast.hosts=es_master
+      - discovery.type=zen
+      - discovery.zen.ping_timeout=5s
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: always
+    depends_on:
+      - master
+    links:
+      - master:es_master
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+volumes:
+  data01:
+    driver: local
+networks:
+  elastic:
+    driver: bridge
